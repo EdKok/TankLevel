@@ -1,5 +1,5 @@
 // Tank levels are supposed to be sent to Signal K as a "ratio" - a number between 0 and 1, where 0 is empty and 1 is full
-// Sesors covered with glass or lens will need to be calibrated
+// Sensors covered with glass or lens will need to be calibrated
 #include <Wire.h>                               // IIC
 #include "Adafruit_VL53L0X.h"
 #include "sensesp/signalk/signalk_output.h"
