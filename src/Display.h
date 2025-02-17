@@ -11,7 +11,7 @@ byte radius3=6;       // radius needle mount
 int value;
 int skip = 0;
 
-void Display_function(float output, bool is_connected) {
+void Display_function(float output) {
   u8g2.clearBuffer();				                  // clear the internal memory
   u8g2.setFont(u8g2_font_unifont_h_symbols);  // just for the up/down arrows
 
@@ -40,8 +40,6 @@ void Display_function(float output, bool is_connected) {
   if (value>85) { u8g2.drawStr(0,10,"VOL!"); }
   else if (value>80) { u8g2.drawStr(0,10,"Bijna"); u8g2.drawStr(0,20,"vol"); }
   else if (value<5) { u8g2.drawStr(0,10,"Leeg"); }
-  if (is_connected) { u8g2.drawStr(110,10,"OK"); }
-  else { u8g2.drawStr(105,10,"NOK"); }
   float val = map(value, 0, 100, 0, 180);
   val = val*3.14/180 -1.572;
   int xp = cx+(sin(val) * radius);

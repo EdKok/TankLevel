@@ -21,7 +21,6 @@ uint delayTime = 2000;
 SKOutput<float>* distance_output;
 const char* sensor_config_path = "/sensors/vl53l0x/distance";
 const char* sk_path = "tanks.blackwater.level";
-bool is_connected = true;                        // Assume connected to SKserver by default
 
 int read_distance_callback() {
     int distance = mySensor.readRange();
@@ -56,7 +55,7 @@ void setup() {
     // Build the SensESP application
     SensESPAppBuilder builder;
     sensesp_app = builder.set_hostname("SensESP BlackWaterLevel")
-                         ->set_wifi("AP-SSID", "SomePWD")
+                         ->set_wifi("SSID", "password")
                          ->set_sk_server("10.10.10.1", 3000)
                          ->enable_ota("myOTApwd")
                          //->enable_wifi_signal_sensor()
@@ -85,6 +84,10 @@ void setup() {
         }
 
         oldOutput = output;                              // Save the actual value for the next run
+
+        Display_function(output);          // Pass the connection status to Display_function
+        return static_cast<float>(output) / 100.0f;      // Ensure floating-point division
+    };
 
     // Parameters for the lambda transform
     const ParamInfo* lambda_param_data = new ParamInfo[2]{
