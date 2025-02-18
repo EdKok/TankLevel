@@ -7,7 +7,6 @@
 #include "Adafruit_VL53L0X.h"                   // The driver for the sensor
 #include "sensesp/signalk/signalk_output.h"
 #include "sensesp_app_builder.h"
-#include "sensesp/transforms/moving_average.h"
 #include "sensesp/transforms/linear.h"
 #include "sensesp/transforms/lambda_transform.h"
 
