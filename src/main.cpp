@@ -10,7 +10,6 @@
 #include "sensesp/transforms/moving_average.h"
 #include "sensesp/transforms/linear.h"
 #include "sensesp/transforms/lambda_transform.h"
-#include "sensesp/net/ws_client.h"
 
 using namespace sensesp;
 
