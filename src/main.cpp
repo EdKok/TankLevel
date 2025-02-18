@@ -85,7 +85,7 @@ void setup() {
 
         oldOutput = output;                              // Save the actual value for the next run
 
-        Display_function(output);          // Pass the connection status to Display_function
+        Display_function(output);                        // Pass the calculated value to Display_function
         return static_cast<float>(output) / 100.0f;      // Ensure floating-point division
     };
 
@@ -100,18 +100,17 @@ void setup() {
     );
 
     // Create the tank level sensor and connect the transforms
-    auto* tanklevel = new RepeatSensor<int>(delayTime, read_distance_callback);             // returns mm
+    auto* tanklevel = new RepeatSensor<int>(delayTime, read_distance_callback);         // returns mm
 
-          tanklevel->connect_to(new Linear(1, 0, "/BlackWaterLevel/Linear"))                // mutiplier (1), offset (-30)
-                   ->connect_to(Lambda_transform)                                           // calculate ratio (0....1)
+          tanklevel->connect_to(new Linear(1, 0, "/BlackWaterLevel/Linear"))            // mutiplier (1), offset (-30)
+                   ->connect_to(Lambda_transform)                                       // calculate ratio (0....1)
                    ->connect_to(new SKOutputFloat(
-                    sk_path,                                                                // Signal K path
-                    new SKMetadata("ratio",                                                 // Define output units
-                                   "Blackwater Tank Level")                                 // Value description
+                    sk_path,                                                            // Signal K path
+                    new SKMetadata("ratio",                                             // Define output units
+                                   "Blackwater Tank Level")                             // Value description
                    ));
                             
-    // Start the SensESP application
-    sensesp_app->start();
+    sensesp_app->start();                                                               // Start the SensESP application
 }
 
 void loop() {
