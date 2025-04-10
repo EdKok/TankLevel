@@ -12,16 +12,15 @@ int value;
 int skip = 0;
 
 void Display_function(float output) {
-  u8g2.clearBuffer();				                  // clear the internal memory
-  u8g2.setFont(u8g2_font_unifont_h_symbols);  // just for the up/down arrows
+  u8g2.clearBuffer();                          // clear the internal memory
 
-  value = (int(output));                      // cast float to int
-  if (skip<2) {                               // Prevent needle starting at "0" first round,
-    skip++;                                   // skips first iterations
+  value = (int(output));                       // cast float to int
+  if (skip<2) {                                // Prevent needle starting at "0" first round,
+    skip++;                                    // skips first iterations
     return;
   }
 
-  if (value<1) { value = 0; }                 // prevent needle below '0'
+  if (value<1) { value = 0; }                  // prevent needle below '0'
   
   u8g2.setFont(u8g2_font_t0_12b_te);
   u8g2.drawCircle(cx,cy,radius, U8G2_DRAW_UPPER_LEFT|U8G2_DRAW_UPPER_RIGHT );
