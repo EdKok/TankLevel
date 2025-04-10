@@ -7,7 +7,7 @@
 #include "Adafruit_VL53L0X.h"                   // The driver for the sensor
 #include "sensesp/signalk/signalk_output.h"
 #include "sensesp_app_builder.h"
-#include "sensesp/transforms/moving_average.h"
+//#include "sensesp/transforms/moving_average.h"
 #include "sensesp/transforms/linear.h"
 #include "sensesp/transforms/lambda_transform.h"
 #include "sensesp/net/ws_client.h"
@@ -21,7 +21,9 @@ uint delayTime = 2000;
 SKOutput<float>* distance_output;
 const char* sensor_config_path = "/sensors/vl53l0x/distance";
 const char* sk_path = "tanks.blackwater.level";
+bool is_connected = true;                        // Assume connected to SKserver by default
 
+// Callback function to read distance from the sensor
 int read_distance_callback() {
     int distance = mySensor.readRange();
     Serial.print("Distance: "); Serial.println(distance); // Print the distance
@@ -34,10 +36,8 @@ void setup() {
 
     // Initialize display driver and show splash screen
     u8g2.begin();
-    u8g2.firstPage();
-    do {
-        u8g2.drawXBMP(0, 0, 128, 64, u8g2_logo);  // Show splash during startup
-    } while (u8g2.nextPage());
+    u8g2.drawXBMP(0, 0, 128, 64, u8g2_logo);  // Show splash during startup
+    u8g2.sendBuffer();                        // Transfer internal memory to the display
 
     // Initialize the sensor and handle failure
     if (!mySensor.begin()) {
@@ -55,7 +55,7 @@ void setup() {
     // Build the SensESP application
     SensESPAppBuilder builder;
     sensesp_app = builder.set_hostname("SensESP BlackWaterLevel")
-                         ->set_wifi("SSID", "password")
+                         ->set_wifi("SSID", "something")
                          ->set_sk_server("10.10.10.1", 3000)
                          ->enable_ota("myOTApwd")
                          //->enable_wifi_signal_sensor()
@@ -84,6 +84,14 @@ void setup() {
         }
 
         oldOutput = output;                              // Save the actual value for the next run
+
+        WSClient* ws_client = sensesp_app->get_ws_client();
+        if (!ws_client->is_connected()) {
+            Serial.println("Not connected to Signal K server");
+            is_connected = false;                        // Set flag to false if not connected
+        } else {
+            Serial.println("Connected to Signal K server");
+        }
 
         Display_function(output);          // Pass the connection status to Display_function
         return static_cast<float>(output) / 100.0f;      // Ensure floating-point division
